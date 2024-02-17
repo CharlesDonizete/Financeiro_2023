@@ -10,6 +10,7 @@ using Infra.Configuracao;
 using Infra.Repositorio;
 using Infra.Repositorio.Generics;
 using Microsoft.EntityFrameworkCore;
+using WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,8 @@ builder.Services.AddDbContext<ContextBase>(options =>
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ContextBase>();
+
+//builder.Services.AddSingletonsImplementingInterface();
 
 //Interface e repositorio
 builder.Services.AddSingleton(typeof(InterfaceGeneric<>), typeof(RepositoryGenerics<>));
