@@ -9,6 +9,6 @@ namespace Domain.Interfaces.IUsuarioSistemaFinanceiro
 
         Task RemoverUsuarios(List<UsuarioSistemaFinanceiro> usuarios);
 
-        Task<UsuarioSistemaFinanceiro> ObterUsuarioPorEmail(string emailUsuario);
+        Task<UsuarioSistemaFinanceiro?> ObterUsuarioPorEmail(string emailUsuario);
     }
 }
