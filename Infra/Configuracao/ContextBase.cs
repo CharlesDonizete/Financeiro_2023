@@ -31,7 +31,7 @@ namespace Infra.Configuracao
 
         public string ObterStringConexao()
         {
-            return "Data Source=DESKTOP-J5VHRAJ\\SQLEXPRESS01;Initial Catalog=FINANCEIRO_2023;Integrated Security=False;User Id=admin;Password=123";
+            return "Data Source=DESKTOP-J5VHRAJ\\SQLEXPRESS01;Initial Catalog=Financeiro_2023;Integrated Security=False;User Id=admin;Password=123;TrustServerCertificate=true";
         }
     }
 }
