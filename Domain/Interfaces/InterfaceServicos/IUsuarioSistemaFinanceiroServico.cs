@@ -4,6 +4,6 @@ namespace Domain.Interfaces.InterfaceServicos
 {
     public interface IUsuarioSistemaFinanceiroServico
     {
-        Task CadastrausuarioNoSistema(UsuarioSistemaFinanceiro usuarioSistemaFinanceiro);
+        Task CadastraUsuarioNoSistema(UsuarioSistemaFinanceiro usuarioSistemaFinanceiro);
     }
 }

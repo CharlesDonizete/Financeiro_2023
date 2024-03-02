@@ -20,7 +20,7 @@ namespace Domain.Servicos
             _interfaceUsuarioSistemaFinanceiro = interfaceUsuarioSistemaFinanceiro;
         }
 
-        public async Task CadastrausuarioNoSistema(UsuarioSistemaFinanceiro usuarioSistemaFinanceiro)
+        public async Task CadastraUsuarioNoSistema(UsuarioSistemaFinanceiro usuarioSistemaFinanceiro)
             => await _interfaceUsuarioSistemaFinanceiro.Add(usuarioSistemaFinanceiro);        
     }
 }
