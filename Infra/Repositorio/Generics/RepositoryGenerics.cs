@@ -18,7 +18,7 @@ namespace Infra.Repositorio.Generics
 
         public async Task Add(T Objeto)
         {
-            using(var data = new ContextBase(_OptionsBuilder))
+            using (var data = new ContextBase(_OptionsBuilder))
             {
                 await data.Set<T>().AddAsync(Objeto);
                 await data.SaveChangesAsync();
@@ -38,7 +38,12 @@ namespace Infra.Repositorio.Generics
         {
             using (var data = new ContextBase(_OptionsBuilder))
             {
-                return await data.Set<T>().FindAsync(Id);
+                var entity = await data.Set<T>().FindAsync(Id);
+
+                if(entity == null)
+                    throw new Exception("There is no such an entity.");
+
+                return entity;
             }
         }
 
@@ -46,7 +51,7 @@ namespace Infra.Repositorio.Generics
         {
             using (var data = new ContextBase(_OptionsBuilder))
             {
-               return await data.Set<T>().ToListAsync();                
+                return await data.Set<T>().ToListAsync();
             }
         }
 
