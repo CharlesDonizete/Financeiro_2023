@@ -4,78 +4,73 @@ using Entities.Entidades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebApi.Controllers
+namespace WebApi.Controllers;
+
+[Authorize]
+[Route("api/[controller]")]
+[ApiController]
+public class DespesaController : ControllerBase
 {
-    [Authorize]
-    [Route("api/[controller]")]
-    [ApiController]
-    public class DespesaController : ControllerBase
+    private readonly InterfaceDespesa _interfaceDespesa;
+    private readonly IDespesaServico _despesaServico;
+
+    public DespesaController(
+        InterfaceDespesa interfaceDespesa,
+        IDespesaServico DespesaServico)
     {
-        private readonly InterfaceDespesa _interfaceDespesa;
-        private readonly IDespesaServico _despesaServico;
+        _interfaceDespesa = interfaceDespesa;
+        _despesaServico = DespesaServico;
+    }
 
-        public DespesaController(
-            InterfaceDespesa interfaceDespesa, 
-            IDespesaServico DespesaServico)
+    [HttpGet("/api/ListarDespesasUsuario")]
+    [Produces("application/json")]
+    public async Task<IList<Despesa>> ListarDespesasUsuario(string emailUsuario)
+        => await _interfaceDespesa.ListarDespesasUsuario(emailUsuario);
+
+    [HttpPost("/api/AdicionarDespesa")]
+    [Produces("application/json")]
+    public async Task<Despesa> AdicionarDespesa(Despesa Despesa)
+    {
+        await _despesaServico.AdicionarDespesa(Despesa);
+
+        return Despesa;
+    }
+
+    [HttpPut("/api/AtualizarDespesa")]
+    [Produces("application/json")]
+    public async Task<Despesa> AtualizarDespesa(Despesa Despesa)
+    {
+        await _despesaServico.AtualizarDespesa(Despesa);
+
+        return Despesa;
+    }
+
+    [HttpGet("/api/ObterDespesa")]
+    [Produces("application/json")]
+    public async Task<Despesa> ObterDespesa(int id)
+    {
+        return await _interfaceDespesa.GetEntityById(id);
+    }
+
+    [HttpDelete("/api/DeletarDespesa")]
+    [Produces("application/json")]
+    public async Task<bool> DeletarDespesa(int id)
+    {
+        try
         {
-            _interfaceDespesa = interfaceDespesa;
-            _despesaServico = DespesaServico;
-        }
-
-        [HttpGet("/api/ListarDespesasUsuario")]
-        [Produces("application/json")]
-        public async Task<object> ListarDespesasUsuario(string emailUsuario)
-        {
-            return await _interfaceDespesa.ListarDespesasUsuario(emailUsuario);
-        }
-
-        [HttpPost("/api/AdicionarDespesa")]
-        [Produces("application/json")]
-        public async Task<object> AdicionarDespesa(Despesa Despesa)
-        {
-            await _despesaServico.AdicionarDespesa(Despesa);
-
-            return Despesa;
-        }
-
-        [HttpPut("/api/AtualizarDespesa")]
-        [Produces("application/json")]
-        public async Task<object> AtualizarDespesa(Despesa Despesa)
-        {             
-            await _despesaServico.AtualizarDespesa(Despesa);
-
-            return Despesa;
-        }
-
-        [HttpGet("/api/ObterDespesa")]
-        [Produces("application/json")]
-        public async Task<object> ObterDespesa(int id)
-        {            
-            return await _interfaceDespesa.GetEntityById(id);
-        }
-
-        [HttpDelete("/api/DeletarDespesa")]
-        [Produces("application/json")]
-        public async Task<object> DeletarDespesa(int id)
-        {
-            try
-            {
             var Despesa = await _interfaceDespesa.GetEntityById(id);
 
             await _interfaceDespesa.Delete(Despesa);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-            return true;
         }
-
-        [HttpGet("/api/CarregGraficos")]
-        [Produces("application/json")]
-        public async Task<object>  CarregGraficos(string emailUsuario)
+        catch (Exception)
         {
-            return await _despesaServico.CarregaGraficos(emailUsuario);
+            return false;
         }
+        return true;
     }
+
+    [HttpGet("/api/CarregGraficos")]
+    [Produces("application/json")]
+    public async Task<object> CarregGraficos(string emailUsuario)
+        => await _despesaServico.CarregaGraficos(emailUsuario);
 }

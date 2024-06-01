@@ -36,11 +36,11 @@ namespace WebApi.Controllers
             {
                 var token = new TokenJWTBuilder()
                      .AddSecurityKey(JwtSecurityKey.Create("43443FDFDF34DF34343fdf344SDFSDFSDFSDFSDF4545354345SDFGDFGDFGDFGdffgfdGDFGDGR%"))
-                      .AddSubject("Constrole Financeiro")
+                      .AddSubject("Controle Financeiro")
                       .AddIssuer("Teste.Securiry.Bearer")
                       .AddAudience("Teste.Securiry.Bearer")
                       .AddClaim("UsuarioAPINumero", "1")
-                      .AddExpiry(5)
+                      .AddExpiry(20)
                       .Builder();
 
                 return Ok(token.value);

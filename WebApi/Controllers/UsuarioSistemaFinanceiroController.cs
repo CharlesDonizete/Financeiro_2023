@@ -4,68 +4,67 @@ using Entities.Entidades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebApi.Controllers
+namespace WebApi.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+[Authorize]
+public class UsuarioSistemaFinanceiroController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    [Authorize]
-    public class UsuarioSistemaFinanceiroController : ControllerBase
+    private readonly InterfaceUsuarioSistemaFinanceiro _interfaceUsuarioSistemaFinanceiro;
+    private readonly IUsuarioSistemaFinanceiroServico _iUsuarioSistemaFinanceiroServico;
+
+    public UsuarioSistemaFinanceiroController(
+        InterfaceUsuarioSistemaFinanceiro interfaceUsuarioSistemaFinanceiro,
+        IUsuarioSistemaFinanceiroServico iUsuarioSistemaFinanceiroServico)
     {
-        private readonly InterfaceUsuarioSistemaFinanceiro _interfaceUsuarioSistemaFinanceiro;
-        private readonly IUsuarioSistemaFinanceiroServico _iUsuarioSistemaFinanceiroServico;
+        _interfaceUsuarioSistemaFinanceiro = interfaceUsuarioSistemaFinanceiro;
+        _iUsuarioSistemaFinanceiroServico = iUsuarioSistemaFinanceiroServico;
+    }
 
-        public UsuarioSistemaFinanceiroController(
-            InterfaceUsuarioSistemaFinanceiro interfaceUsuarioSistemaFinanceiro, 
-            IUsuarioSistemaFinanceiroServico iUsuarioSistemaFinanceiroServico)
+    [HttpGet("/api/ListarUsuariosSistema")]
+    [Produces("application/json")]
+    public async Task<IList<UsuarioSistemaFinanceiro>> ListarUsuariosSistema(int idSistema)
+        => await _interfaceUsuarioSistemaFinanceiro.ListarUsuariosSistema(idSistema);
+
+    [HttpPost("/api/CadastraUsuarioNoSistema")]
+    [Produces("application/json")]
+    public async Task<bool> CadastraUsuarioNoSistema(int idSistema, string emailUsuario)
+    {
+        try
         {
-            _interfaceUsuarioSistemaFinanceiro = interfaceUsuarioSistemaFinanceiro;
-            _iUsuarioSistemaFinanceiroServico = iUsuarioSistemaFinanceiroServico;
+            await _iUsuarioSistemaFinanceiroServico.CadastraUsuarioNoSistema(
+                new UsuarioSistemaFinanceiro
+                {
+                    IdSistema = idSistema,
+                    EmailUsuario = emailUsuario,
+                    Administrador = false,
+                    SistemaAtual = true,
+                });
+        }
+        catch (Exception)
+        {
+            return false;
         }
 
-        [HttpGet("/api/ListarUsuariosSistema")]
-        [Produces("application/json")]
-        public async Task<object> ListarUsuariosSistema(int idSistema)
-            => await _interfaceUsuarioSistemaFinanceiro.ListarUsuariosSistema(idSistema);
+        return true;
+    }
 
-        [HttpPost("/api/CadastraUsuarioNoSistema")]
-        [Produces("application/json")]
-        public async Task<object> CadastraUsuarioNoSistema(int idSistema, string emailUsuario)
+    [HttpDelete("/api/DeleteUsuarioSistemaFinanceiro")]
+    [Produces("application/json")]
+    public async Task<bool> DeleteUsuarioSistemaFinanceiro(int id)
+    {
+        try
         {
-            try
-            {
-                await _iUsuarioSistemaFinanceiroServico.CadastraUsuarioNoSistema(
-                    new UsuarioSistemaFinanceiro
-                    {
-                        IdSistema = idSistema,
-                        EmailUsuario = emailUsuario,
-                        Administrador = false,
-                        SistemaAtual = true,
-                    });
-            }
-            catch (Exception)
-            {
-                return Task.FromResult(false);
-            }
+            var usuarioSistemaFinanceiro = await _interfaceUsuarioSistemaFinanceiro.GetEntityById(id);
 
-            return Task.FromResult(true);
+            await _interfaceUsuarioSistemaFinanceiro.Delete(usuarioSistemaFinanceiro);
+        }
+        catch (Exception)
+        {
+            return false;
         }
 
-        [HttpDelete("/api/DeleteUsuarioSistemaFinanceiro")]
-        [Produces("application/json")]
-        public async Task<object> DeleteUsuarioSistemaFinanceiro(int id)
-        {
-            try
-            {
-                var usuarioSistemaFinanceiro = await _interfaceUsuarioSistemaFinanceiro.GetEntityById(id);
-
-                await _interfaceUsuarioSistemaFinanceiro.Delete(usuarioSistemaFinanceiro);
-            }
-            catch (Exception)
-            {
-                return Task.FromResult(false);
-            }
-
-            return Task.FromResult(true);
-        }
+        return true;
     }
 }
