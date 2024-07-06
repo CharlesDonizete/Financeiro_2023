@@ -64,4 +64,9 @@ public class SistemaFinanceiroController : ControllerBase
         }
         return true;
     }
+
+    [HttpPost("/api/ExecuteCopiaDespesasSistemaFinanceiro")]
+    [Produces("application/json")]
+    public async Task<bool> ExecuteCopiaDespesasSistemaFinanceiro()
+       => await _interfaceSistemaFinanceiro.ExecuteCopiaDespesasSistemaFinanceiro();
 }
