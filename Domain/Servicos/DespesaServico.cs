@@ -48,8 +48,8 @@ namespace Domain.Servicos
             var despesas_NaoPagasMesesAnteriores = despesasAnteriores.Any()? despesasAnteriores.ToList().Sum(x => x.Valor) : 0;
             var despesas_pagas = despesasUsuario.Where(d=>d.Pago && d.TipoDespesa == EnumTipoDespesa.Contas).Sum(x => x.Valor);
 
-            var despesas_pendentes = despesasUsuario.Where(d => !d.Pago && d.TipoDespesa == EnumTipoDespesa.Investimento).Sum(x => x.Valor);
-            var investimentos = despesasUsuario.Where(d => d.TipoDespesa == EnumTipoDespesa.Contas).Sum(x => x.Valor);
+            var despesas_pendentes = despesasUsuario.Where(d => !d.Pago && d.TipoDespesa == EnumTipoDespesa.Contas).Sum(x => x.Valor);
+            var investimentos = despesasUsuario.Where(d => d.TipoDespesa == EnumTipoDespesa.Investimento).Sum(x => x.Valor);
 
             return new {
                 sucesso = "Ok",

@@ -69,8 +69,8 @@ public class DespesaController : ControllerBase
         return true;
     }
 
-    [HttpGet("/api/CarregGraficos")]
+    [HttpGet("/api/CarregaGraficos")]
     [Produces("application/json")]
-    public async Task<object> CarregGraficos(string emailUsuario)
+    public async Task<object> CarregaGraficos(string emailUsuario)
         => await _despesaServico.CarregaGraficos(emailUsuario);
 }
