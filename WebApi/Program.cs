@@ -88,7 +88,8 @@ if (app.Environment.IsDevelopment() )
     app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Financeiro_2023"); });
 }
 
-var devClient = "http://localhost:4200";
+//var devClient = "http://localhost:4200";
+var devClient = "http://localhost:40";
 
 app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().WithOrigins(devClient));
 
