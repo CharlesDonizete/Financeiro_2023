@@ -6,6 +6,7 @@ using Domain.Interfaces.ISistemaFinanceiro;
 using Domain.Interfaces.IUsuarioSistemaFinanceiro;
 using Domain.Servicos;
 using Entities.Entidades;
+using FluentValidation;
 using Infra.Configuracao;
 using Infra.Repositorio;
 using Infra.Repositorio.Generics;
@@ -13,13 +14,18 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using WebApi.Extensions;
+using WebApi.Models;
 using WebApi.Token;
+using WebApi.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddCustomFluentValidation();
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => { 
@@ -34,7 +40,17 @@ builder.Services.AddDbContext<ContextBase>(options =>
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ContextBase>();
 
+
+
+
 //builder.Services.AddSingletonsImplementingInterface();
+//builder.Services.AddFluentValidationAutoValidation();
+//builder.Services.AddValidatorsFromAssembly(Assembly.Load("WebApi"));
+
+//builder.Services.AddControllers()
+//                ;
+
+builder.Services.AddScoped<IValidator<CategoriaModel>, CategoriaValidator>();
 
 //Interface e repositorio
 builder.Services.AddSingleton(typeof(InterfaceGeneric<>), typeof(RepositoryGenerics<>));

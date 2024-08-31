@@ -1,8 +1,11 @@
 ﻿using Domain.Interfaces.ICategoria;
 using Domain.Interfaces.InterfaceServicos;
 using Entities.Entidades;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Extensions;
+using WebApi.Models;
 
 namespace WebApi.Controllers;
 
@@ -29,11 +32,21 @@ public class CategoriaController : ControllerBase
 
     [HttpPost("/api/AdicionarCategoria")]
     [Produces("application/json")]
-    public async Task<Categoria> AdicionarCategoria(Categoria categoria)
+    public async Task<IActionResult> AdicionarCategoria(CategoriaModel categoriaModel) 
     {
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState.ToErroModel(HttpContext));
+        }
+
+        var categoria = new Categoria() { IdSistema= categoriaModel.IdSistema };
+
         await _categoriaServico.AdicionarCategoria(categoria);
 
-        return categoria;
+        categoriaModel.Id = categoria.Id;
+
+        return Ok(categoriaModel);
     }
 
     [HttpPut("/api/AtualizarCategoria")]
