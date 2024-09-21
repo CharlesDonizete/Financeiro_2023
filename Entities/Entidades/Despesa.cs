@@ -1,4 +1,5 @@
 ﻿using Entities.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities.Entidades
@@ -6,6 +7,8 @@ namespace Entities.Entidades
     [Table("Despesa")]
     public class Despesa : Base
     {
+        [Display(Name = "Nome")]
+        public string Nome { get; set; }
         public decimal Valor { get; set; }
         public int Mes { get; set; }
         public int Ano { get; set; }
@@ -20,6 +23,6 @@ namespace Entities.Entidades
         [ForeignKey("Categoria")]
         [Column(Order = 1)]
         public int IdCategoria { get; set; }
-        //public virtual Categoria Categoria { get; set; }
+        public virtual Categoria Categoria { get; set; }
     }
 }

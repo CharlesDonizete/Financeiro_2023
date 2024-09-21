@@ -7,5 +7,7 @@ namespace Domain.Interfaces.InterfaceServicos
         Task AdicionarSistemaFinanceiro(SistemaFinanceiro sistemaFinanceiro);
 
         Task AtualizarSistemaFinanceiro(SistemaFinanceiro sistemaFinanceiro);
+
+        Task<bool> Existe(int idSistema);
     }
 }

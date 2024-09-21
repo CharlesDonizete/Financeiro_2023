@@ -3,9 +3,8 @@
 namespace Entities.Entidades
 {
     [Table("UsuarioSistemaFinanceiro")]
-    public class UsuarioSistemaFinanceiro
-    {
-        public int Id { get; set; }
+    public class UsuarioSistemaFinanceiro : Base
+    {        
         public string EmailUsuario { get; set; }
         public bool Administrador { get; set; }
         public bool SistemaAtual { get; set; }

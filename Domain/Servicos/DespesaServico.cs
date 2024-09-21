@@ -1,11 +1,12 @@
-﻿using Domain.Interfaces.IDespesa;
+﻿using Domain.Interfaces.Generics;
+using Domain.Interfaces.IDespesa;
 using Domain.Interfaces.InterfaceServicos;
 using Entities.Entidades;
 using Entities.Enums;
 
 namespace Domain.Servicos
 {
-    public class DespesaServico : IDespesaServico
+    public class DespesaServico : IDespesaServico, IInjectable
     {
         private readonly InterfaceDespesa _interfaceDespesa;
 

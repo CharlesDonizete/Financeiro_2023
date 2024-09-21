@@ -1,33 +1,30 @@
-﻿using Domain.Interfaces.ICategoria;
+﻿using Domain.Interfaces.Generics;
+using Domain.Interfaces.ICategoria;
 using Entities.Entidades;
 using Infra.Configuracao;
 using Infra.Repositorio.Generics;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace Infra.Repositorio
 {
-    public class RepositorioCategoria : RepositoryGenerics<Categoria>, InterfaceCategoria
+    public class RepositorioCategoria : RepositoryGenerics<Categoria>, InterfaceCategoria, IInjectable
     {
-        private readonly DbContextOptions<ContextBase> _OptionsBuilder;
+        private readonly ContextBase _context;
 
-        public RepositorioCategoria()
+        public RepositorioCategoria(ContextBase context) : base(context)
         {
-            _OptionsBuilder = new DbContextOptions<ContextBase>();
+            _context = context;
         }
 
         public async Task<IList<Categoria>> ListarCategoriasUsuario(string emailUsuario)
         {
-            using(var banco = new ContextBase(_OptionsBuilder))
-            {
-                return await
-                    (from s in banco.SistemaFinanceiro
-                     join c in banco.Categoria on s.Id equals c.IdSistema
-                     join us in banco.UsuarioSistemaFinanceiro on s.Id equals us.IdSistema
-                     where us.EmailUsuario.Equals(emailUsuario) && us.SistemaAtual
-                     select c
-                     ).AsNoTracking().ToListAsync();
-            }
+            return await
+                (from s in _context.SistemaFinanceiro
+                 join c in _context.Categoria on s.Id equals c.IdSistema
+                 join us in _context.UsuarioSistemaFinanceiro on s.Id equals us.IdSistema
+                 where us.EmailUsuario.Equals(emailUsuario) && us.SistemaAtual
+                 select c
+                 ).AsNoTracking().ToListAsync();
         }
     }
 }

@@ -1,35 +1,26 @@
-using Domain.Interfaces.Generics;
-using Domain.Interfaces.ICategoria;
-using Domain.Interfaces.IDespesa;
-using Domain.Interfaces.InterfaceServicos;
-using Domain.Interfaces.ISistemaFinanceiro;
-using Domain.Interfaces.IUsuarioSistemaFinanceiro;
-using Domain.Servicos;
 using Entities.Entidades;
-using FluentValidation;
 using Infra.Configuracao;
-using Infra.Repositorio;
-using Infra.Repositorio.Generics;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using WebApi.Extensions;
-using WebApi.Models;
 using WebApi.Token;
-using WebApi.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddCustomFluentValidation();
 
+builder.Services.AddAutoMapper(typeof(Program));
+
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c => { 
-     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Financeiro_2023", Version = "v1" });
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Financeiro_2023", Version = "v1" });
 });
 
 builder.Services.AddDbContext<ContextBase>(options =>
@@ -40,30 +31,7 @@ builder.Services.AddDbContext<ContextBase>(options =>
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ContextBase>();
 
-
-
-
-//builder.Services.AddSingletonsImplementingInterface();
-//builder.Services.AddFluentValidationAutoValidation();
-//builder.Services.AddValidatorsFromAssembly(Assembly.Load("WebApi"));
-
-//builder.Services.AddControllers()
-//                ;
-
-builder.Services.AddScoped<IValidator<CategoriaModel>, CategoriaValidator>();
-
-//Interface e repositorio
-builder.Services.AddSingleton(typeof(InterfaceGeneric<>), typeof(RepositoryGenerics<>));
-builder.Services.AddSingleton<InterfaceCategoria, RepositorioCategoria>();
-builder.Services.AddSingleton<InterfaceDespesa, RepositorioDespesa>();
-builder.Services.AddSingleton<InterfaceSistemaFinanceiro, RepositorioSistemaFinanceiro>();
-builder.Services.AddSingleton<InterfaceUsuarioSistemaFinanceiro, RepositorioUsuarioSistemaFinanceiro>();
-
-//Serviço dominio
-builder.Services.AddSingleton<ICategoriaServico, CategoriaServico>();
-builder.Services.AddSingleton<IDespesaServico, DespesaServico>();
-builder.Services.AddSingleton<ISistemaFinanceiroServico, SistemaFinanceiroServico>();
-builder.Services.AddSingleton<IUsuarioSistemaFinanceiroServico, UsuarioSistemaFinanceiroServico>();
+builder.Services.InjecaoDependencia();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
              .AddJwtBearer(option =>
@@ -98,9 +66,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment() )
+if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();    
+    app.UseSwagger();
     app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Financeiro_2023"); });
 }
 

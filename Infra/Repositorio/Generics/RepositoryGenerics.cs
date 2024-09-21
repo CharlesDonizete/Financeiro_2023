@@ -1,4 +1,5 @@
 ﻿using Domain.Interfaces.Generics;
+using Entities.Entidades;
 using Infra.Configuracao;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32.SafeHandles;
@@ -6,62 +7,46 @@ using System.Runtime.InteropServices;
 
 namespace Infra.Repositorio.Generics
 {
-    public class RepositoryGenerics<T> : InterfaceGeneric<T>, IDisposable where T : class
+    public class RepositoryGenerics<T> : InterfaceGeneric<T>, IDisposable where T : Base
     {
+        private readonly ContextBase _context;
 
-        private readonly DbContextOptions<ContextBase> _OptionsBuilder;
-
-        public RepositoryGenerics()
+        public RepositoryGenerics(ContextBase context)
         {
-            _OptionsBuilder = new DbContextOptions<ContextBase>();
+            _context = context;
         }
 
-        public async Task Add(T Objeto)
+        public async Task Add(T objeto)
         {
-            using (var data = new ContextBase(_OptionsBuilder))
-            {
-                await data.Set<T>().AddAsync(Objeto);
-                await data.SaveChangesAsync();
-            }
+            _context.Set<T>().Add(objeto);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(T Objeto)
+        public async Task Delete(T objeto)
         {
-            using (var data = new ContextBase(_OptionsBuilder))
-            {
-                data.Set<T>().Remove(Objeto);
-                await data.SaveChangesAsync();
-            }
+            _context.Set<T>().Remove(objeto);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<T> GetEntityById(int Id)
+        public async Task<T?> GetEntityById(int id)
         {
-            using (var data = new ContextBase(_OptionsBuilder))
-            {
-                var entity = await data.Set<T>().FindAsync(Id);
-
-                if(entity == null)
-                    throw new Exception("There is no such an entity.");
-
-                return entity;
-            }
+            return await _context.Set<T>().FindAsync(id);
         }
 
         public async Task<List<T>> List()
         {
-            using (var data = new ContextBase(_OptionsBuilder))
-            {
-                return await data.Set<T>().ToListAsync();
-            }
+            return await _context.Set<T>().ToListAsync();
         }
 
-        public async Task Update(T Objeto)
+        public async Task<bool> Exists(int id)
         {
-            using (var data = new ContextBase(_OptionsBuilder))
-            {
-                data.Set<T>().Update(Objeto);
-                await data.SaveChangesAsync();
-            }
+            return await _context.Set<T>().AnyAsync(x => x.Id == id);
+        }
+
+        public async Task Update(T objeto)
+        {
+            _context.Set<T>().Update(objeto);
+            await _context.SaveChangesAsync();
         }
 
         #region Disposed https://docs.microsoft.com/pt-br/dotnet/standard/garbage-collection/implementing-dispose

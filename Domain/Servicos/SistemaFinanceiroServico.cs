@@ -1,11 +1,11 @@
-﻿using Domain.Interfaces.IDespesa;
+﻿using Domain.Interfaces.Generics;
 using Domain.Interfaces.InterfaceServicos;
 using Domain.Interfaces.ISistemaFinanceiro;
 using Entities.Entidades;
 
 namespace Domain.Servicos
 {
-    public class SistemaFinanceiroServico : ISistemaFinanceiroServico
+    public class SistemaFinanceiroServico : ISistemaFinanceiroServico, IInjectable
     {
         private readonly InterfaceSistemaFinanceiro _interfaceSistemaFinanceiro;
 
@@ -31,7 +31,7 @@ namespace Domain.Servicos
 
                 await _interfaceSistemaFinanceiro.Add(sistemaFinanceiro);
             }
-                
+
         }
 
         public async Task AtualizarSistemaFinanceiro(SistemaFinanceiro sistemaFinanceiro)
@@ -43,7 +43,11 @@ namespace Domain.Servicos
                 sistemaFinanceiro.DiaFechamento = 1;
                 await _interfaceSistemaFinanceiro.Update(sistemaFinanceiro);
             }
-                
+
         }
+
+        public async Task<bool> Existe(int idSistema)
+            => await _interfaceSistemaFinanceiro.Exists(idSistema);
+        
     }
 }

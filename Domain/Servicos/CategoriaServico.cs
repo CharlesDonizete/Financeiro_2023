@@ -1,10 +1,11 @@
-﻿using Domain.Interfaces.ICategoria;
+﻿using Domain.Interfaces.Generics;
+using Domain.Interfaces.ICategoria;
 using Domain.Interfaces.InterfaceServicos;
 using Entities.Entidades;
 
 namespace Domain.Servicos
 {
-    public class CategoriaServico : ICategoriaServico
+    public class CategoriaServico : ICategoriaServico, IInjectable
     {
         private readonly InterfaceCategoria _interfaceCategoria;
 
