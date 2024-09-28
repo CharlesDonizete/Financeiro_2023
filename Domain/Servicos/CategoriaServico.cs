@@ -15,17 +15,12 @@ namespace Domain.Servicos
         }
 
         public async Task AdicionarCategoria(Categoria categoria)
-        {
-            var valido = categoria.ValidarPropriedadeString(categoria.Nome, "Nome");
-            if (valido)
-                await _interfaceCategoria.Add(categoria);
-        }
+            => await _interfaceCategoria.Add(categoria);
 
         public async Task AtualizarCategoria(Categoria categoria)
-        {
-            var valido = categoria.ValidarPropriedadeString(categoria.Nome, "Nome");
-            if (valido)
-                await _interfaceCategoria.Update(categoria);
-        }
+            =>  await _interfaceCategoria.Update(categoria);
+
+        public async Task<bool> Existe(int idCategoria)
+            => await _interfaceCategoria.Exists(idCategoria);
     }
 }

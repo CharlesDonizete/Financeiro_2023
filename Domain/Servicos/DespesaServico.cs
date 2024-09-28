@@ -21,11 +21,8 @@ namespace Domain.Servicos
             despesa.DataCadastro = data;
             despesa.Ano = data.Year;
             despesa.Mes = data.Month;
-
-            var valido = despesa.ValidarPropriedadeString(despesa.Nome, "Nome");
-
-            if (valido)
-                await _interfaceDespesa.Add(despesa);
+            
+            await _interfaceDespesa.Add(despesa);
         }
 
         public async Task AtualizarDespesa(Despesa despesa)
@@ -34,11 +31,8 @@ namespace Domain.Servicos
             despesa.DataAlteracao = data;
             
             if(despesa.Pago) despesa.DataPagamento = data;
-
-            var valido = despesa.ValidarPropriedadeString(despesa.Nome, "Nome");
-
-            if (valido)
-                await _interfaceDespesa.Update(despesa);
+            
+            await _interfaceDespesa.Update(despesa);
         }
 
         public async Task<object> CarregaGraficos(string emailUsuario)

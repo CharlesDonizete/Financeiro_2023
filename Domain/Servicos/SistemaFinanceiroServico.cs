@@ -16,10 +16,10 @@ namespace Domain.Servicos
 
         public async Task AdicionarSistemaFinanceiro(SistemaFinanceiro sistemaFinanceiro)
         {
-            var valido = sistemaFinanceiro.ValidarPropriedadeString(sistemaFinanceiro.Nome, "Nome");
+            //var valido = sistemaFinanceiro.ValidarPropriedadeString(sistemaFinanceiro.Nome, "Nome");
 
-            if (valido)
-            {
+            //if (valido)
+            //{
                 var data = DateTime.Now;
 
                 sistemaFinanceiro.DiaFechamento = 1;
@@ -30,19 +30,19 @@ namespace Domain.Servicos
                 sistemaFinanceiro.GerarCopiaDespesa = true;
 
                 await _interfaceSistemaFinanceiro.Add(sistemaFinanceiro);
-            }
+            //}
 
         }
 
         public async Task AtualizarSistemaFinanceiro(SistemaFinanceiro sistemaFinanceiro)
         {
-            var valido = sistemaFinanceiro.ValidarPropriedadeString(sistemaFinanceiro.Nome, "Nome");
+            //var valido = sistemaFinanceiro.ValidarPropriedadeString(sistemaFinanceiro.Nome, "Nome");
 
-            if (valido)
-            {
+            //if (valido)
+            //{
                 sistemaFinanceiro.DiaFechamento = 1;
                 await _interfaceSistemaFinanceiro.Update(sistemaFinanceiro);
-            }
+            //}
 
         }
 

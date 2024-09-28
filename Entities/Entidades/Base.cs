@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Entities.Entidades
 {
-    public class Base : Notifica
+    public class Base
     {
         [Display(Name = "Código")]
         public int Id { get; set; }       

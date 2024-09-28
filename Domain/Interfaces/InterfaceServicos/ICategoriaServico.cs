@@ -7,5 +7,7 @@ namespace Domain.Interfaces.InterfaceServicos
         Task AdicionarCategoria(Categoria categoria);
 
         Task AtualizarCategoria(Categoria categoria);
+
+        Task<bool> Existe(int idCategoria);
     }
 }

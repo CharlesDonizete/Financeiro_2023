@@ -42,7 +42,6 @@ public class CategoriaController : ControllerBase
     [Produces("application/json")]
     public async Task<IActionResult> AdicionarCategoria(CategoriaModel categoriaModel)
     {
-
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState.ToErroModel(HttpContext));
